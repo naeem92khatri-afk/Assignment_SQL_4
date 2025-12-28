@@ -1,0 +1,128 @@
+-- Create Table by Using Create comand 1st Table
+CREATE TABLE orderss (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    total_amount DECIMAL(10,2)
+);
+
+-- Create Table by Using Create comand 2nd Table
+CREATE TABLE payments (
+    payment_id INT PRIMARY KEY,
+    order_id INT,
+    payment_date DATE,
+    amount DECIMAL(10,2)
+);
+
+-- Inserting Values into the Table Using INSERT Command 
+INSERT INTO orderss VALUES 
+(101, 01, '2024-10-10', 4500.60),
+(102, 02, '2025-06-12', 3800.50),
+(103, 03, '2024-07-15', 2510.00),
+(104, 01, '2024-12-20', 1876.30),
+(105, 04, '2025-01-02', 4900.00);
+
+INSERT INTO payments VALUES
+(1, 101, '2025-01-11', 4500.60),
+(2, 102, '2025-06-20', 3800.50),
+(3, 103, '2024-08-03', 2510.00),
+(4, 105, '2025-01-26', 1876.30),
+(5, 106, '2025-01-28', 3200.00);
+
+-- Display Both the Tables
+
+SELECT * FROM orderss;
+SELECT * FROM payments;
+
+-- WHERE Command 
+SELECT * FROM orderss WHERE total_amount > 2800;
+
+-- Aggrigate Functions
+SELECT SUM(total_amount) AS Total_Sale_Amount FROM orderss;
+SELECT AVG(total_amount) AS Average_Sale_Amount FROM orderss;
+SELECT MAX(total_amount) AS Maximum FROM orderss;
+SELECT MIN(total_amount) AS Minimum FROM orderss;
+SELECT COUNT(*) AS Number_Of_Orders FROM orderss;
+
+-- Logical Operators
+SELECT * FROM orders 
+WHERE total_amount > 2000 AND customer_id = 101;
+SELECT * FROM orders 
+WHERE total_amount > 3000 OR customer_id = 102;
+SELECT * FROM orders 
+WHERE customer_id != 106;
+
+-- Order By
+SELECT * FROM orderss 
+ORDER BY order_date ASC;
+
+SELECT * FROM payments
+ORDER BY payment_date DESC;
+
+-- Between Command
+SELECT * FROM orderss WHERE total_amount BETWEEN 1500 AND 4000;
+
+-- IN / NOT IN Command
+SELECT * FROM orderss WHERE customer_id IN (01, 03);
+SELECT * FROM payments WHERE order_id NOT IN (102);
+
+-- GROUP BY Command
+SELECT customer_id, SUM(total_amount) AS Expences FROM orderss GROUP BY customer_id;
+
+-- HAVING Command
+SELECT customer_id, SUM(total_amount) AS Expences FROM orderss GROUP BY customer_id HAVING Expences >= 3800.50;
+
+-- JOINS
+
+-- INNER JOIN statments
+SELECT o.order_id, o.total_amount, p.payment_date
+FROM orderss o
+INNER JOIN payments p
+ON o.order_id = p.order_id;
+
+-- LEFT JOIN statments
+SELECT o.order_id, o.total_amount, p.payment_date
+FROM orderss o
+LEFT JOIN payments p
+ON o.order_id = p.order_id;
+
+-- RIGHT JOIN statments
+SELECT o.order_id, o.total_amount, p.payment_date
+FROM orderss o
+RIGHT JOIN payments p
+ON o.order_id = p.order_id;
+
+-- UNION Command
+SELECT o.order_id, o.total_amount, p.payment_date
+FROM orderss o
+LEFT JOIN payments p
+ON o.order_id = p.order_id
+UNION
+SELECT o.order_id, o.total_amount, p.payment_date
+FROM orderss o
+RIGHT JOIN payments p
+ON o.order_id = p.order_id;
+
+-- SUB Query
+SELECT * FROM orderss
+WHERE customer_id IN (
+    SELECT customer_id FROM orderss GROUP BY customer_id HAVING COUNT(*) > 1);
+
+
+-- CASE Statments
+SELECT order_id, total_amount,
+CASE
+    WHEN total_amount >= 3000 THEN 'High Value'
+    WHEN total_amount >= 2000 THEN 'Medium Value'
+    ELSE 'Low Value'
+END AS order_type
+FROM orderss;
+
+-- VIEW Creation Command
+CREATE VIEW Customer_view AS
+SELECT o.order_id, o.customer_id , p.payment_date,p.amount
+FROM orderss o
+INNER JOIN payments p
+ON o.order_id=p.order_id;
+
+SELECT * FROM Customer_view;
