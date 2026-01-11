@@ -1,0 +1,36 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
+# 1. Load the Dataset (Example: Gold Prices)
+# You can replace this with a local CSV file: pd.read_csv('gold_prices.csv')
+data = {
+    'Date': pd.date_range(start='2026-01-01', periods=10, freq='D'),
+    'Price': [1820, 1825, 1830, 1840, 1835, 1850, 1855, 1860, 1875, 1880]
+}
+df = pd.DataFrame(data)
+
+# 2. Preprocessing: Convert Date to ordinal numbers (Linear Regression needs numbers)
+df['Date_Ordinal'] = df['Date'].map(pd.Timestamp.toordinal)
+
+# 3. Defining Features (X) and Target (y)
+X = df[['Date_Ordinal']] # Independent Variable
+y = df['Price']          # Dependent Variable (Target)
+
+# 4. Splitting the data into Training and Testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# 5. Build and Train the Model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# 6. Make Predictions
+y_pred = model.predict(X_test)
+
+# 7. Evaluate the Model
+print(f"Intercept: {model.intercept_}")
+print(f"Coefficient: {model.coef_[0]}")
+print(f"Mean Absolute Error: {metrics.mean_absolute_error(y_test, y_pred)}")
