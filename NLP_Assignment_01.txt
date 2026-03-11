@@ -1,0 +1,49 @@
+# Import required libraries
+import nltk
+import string
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+# Download required datasets (run once)
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+# Two paragraphs as a single input
+text = """
+Natural Language Processing (NLP) is a fascinating field of Artificial Intelligence. 
+It helps computers understand, interpret, and generate human language! 
+However, processing raw text data can be challenging: punctuation, stopwords, and variations of words often create noise.
+
+For example, a sentence like: "Cats, dogs, and birds are running quickly!" 
+contains punctuation marks such as commas, exclamation marks, and more. 
+To analyze this data properly, we must clean it; otherwise, the results may not be accurate.
+"""
+
+print("Original Text:\n", text)
+
+# Step 1: Remove punctuation
+text_no_punct = text.translate(str.maketrans('', '', string.punctuation))
+print("\nText after Removing Punctuation:\n", text_no_punct)
+
+# Step 2: Tokenization
+tokens = word_tokenize(text_no_punct)
+
+# Step 3: Stopword Removal
+stop_words = set(stopwords.words('english'))
+filtered_words = [word for word in tokens if word.lower() not in stop_words]
+
+print("\nAfter Stop Word Removal:\n", filtered_words)
+
+# Step 4: Stemming
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(word) for word in filtered_words]
+
+print("\nAfter Stemming:\n", stemmed_words)
+
+# Step 5: Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in filtered_words]
+
+print("\nAfter Lemmatization:\n", lemmatized_words)
