@@ -1,0 +1,236 @@
+# Install required libraries (run once)
+!pip install nltk scikit-learn gensim
+
+import nltk
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+import string
+
+# -----------------------------
+# INPUT (2 paragraphs as one)
+# -----------------------------
+text = """Natural Language Processing (NLP) is a fascinating field of Artificial Intelligence.
+It helps computers understand human language and respond intelligently.
+However, working with text data can be messy and complex.
+
+Therefore, preprocessing techniques like removing stop words, punctuation,
+and applying stemming or lemmatization are essential.
+These steps improve the quality of data and make machine learning models more efficient."""
+
+# -----------------------------
+# 1. STOP WORD REMOVAL
+# -----------------------------
+tokens = word_tokenize(text.lower())
+stop_words = set(stopwords.words('english'))
+
+filtered_words = [word for word in tokens if word not in stop_words]
+
+print("After Stop Word Removal:\n", filtered_words)
+
+# -----------------------------
+# 2. REMOVE PUNCTUATION
+# -----------------------------
+no_punct = [word for word in filtered_words if word not in string.punctuation]
+
+print("\nAfter Removing Punctuation:\n", no_punct)
+
+# -----------------------------
+# 3. STEMMING
+# -----------------------------
+ps = PorterStemmer()
+stemmed_words = [ps.stem(word) for word in no_punct]
+
+print("\nAfter Stemming:\n", stemmed_words)
+
+# -----------------------------
+# 4. LEMMATIZATION
+# -----------------------------
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in no_punct]
+
+print("\nAfter Lemmatization:\n", lemmatized_words)
+
+# -----------------------------
+# FEATURE ENGINEERING
+# -----------------------------
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
+# Convert list back to sentence
+clean_text = " ".join(no_punct)
+
+# -----------------------------
+# Bag of Words
+# -----------------------------
+cv = CountVectorizer()
+bow = cv.fit_transform([clean_text])
+
+print("\nBag of Words Vocabulary:\n", cv.get_feature_names_out())
+print("\nBag of Words Matrix:\n", bow.toarray())
+
+# -----------------------------
+# TF-IDF
+# -----------------------------
+tfidf = TfidfVectorizer()
+tfidf_matrix = tfidf.fit_transform([clean_text])
+
+print("\nTF-IDF Vocabulary:\n", tfidf.get_feature_names_out())
+print("\nTF-IDF Matrix:\n", tfidf_matrix.toarray())
+
+
+from gensim.models import Word2Vec
+from nltk.tokenize import sent_tokenize
+
+# -----------------------------
+# LONG INPUT (200+ words)
+# -----------------------------
+text2 = """Machine learning is a powerful technology that allows computers to learn from data.
+It is widely used in many applications such as image recognition, speech processing,
+recommendation systems, and natural language processing.
+
+Deep learning is a subset of machine learning that uses neural networks with many layers.
+These models are capable of learning complex patterns from large amounts of data.
+Artificial intelligence is the broader concept of machines being able to carry out tasks in a smart way.
+
+Data science combines statistics, data analysis, and machine learning techniques to extract insights from data.
+Python is one of the most popular programming languages used in data science because of its simplicity and powerful libraries.
+
+Models are trained using datasets and evaluated using different metrics.
+Improving model accuracy is one of the main goals in machine learning projects.
+Feature engineering and preprocessing steps are crucial for building efficient models."""
+
+# -----------------------------
+# TOKENIZATION
+# -----------------------------
+sentences = sent_tokenize(text2)
+data = [word_tokenize(sentence.lower()) for sentence in sentences]
+
+# -----------------------------
+# TRAIN WORD2VEC MODEL
+# -----------------------------
+model = Word2Vec(sentences=data, vector_size=100, window=5, min_count=1, workers=4)
+
+# -----------------------------
+# SIMILARITY CHECK
+# -----------------------------
+print("\nSimilarity between 'machine' and 'learning':",
+      model.wv.similarity('machine', 'learning'))
+
+print("\nSimilarity between 'data' and 'science':",
+      model.wv.similarity('data', 'science'))
+
+print("\nSimilarity between 'python' and 'programming':",
+      model.wv.similarity('python', 'programming'))
+
+# -----------------------------
+# MOST SIMILAR WORDS
+# -----------------------------
+print("\nWords similar to 'machine':")
+print(model.wv.most_similar('machine'))from gensim.models import Word2Vec
+from nltk.tokenize import sent_tokenize
+
+# -----------------------------
+# LONG INPUT (200+ words)
+# -----------------------------
+text2 = """Machine learning is a powerful technology that allows computers to learn from data.
+It is widely used in many applications such as image recognition, speech processing,
+recommendation systems, and natural language processing.
+
+Deep learning is a subset of machine learning that uses neural networks with many layers.
+These models are capable of learning complex patterns from large amounts of data.
+Artificial intelligence is the broader concept of machines being able to carry out tasks in a smart way.
+
+Data science combines statistics, data analysis, and machine learning techniques to extract insights from data.
+Python is one of the most popular programming languages used in data science because of its simplicity and powerful libraries.
+
+Models are trained using datasets and evaluated using different metrics.
+Improving model accuracy is one of the main goals in machine learning projects.
+Feature engineering and preprocessing steps are crucial for building efficient models."""
+
+# -----------------------------
+# TOKENIZATION
+# -----------------------------
+sentences = sent_tokenize(text2)
+data = [word_tokenize(sentence.lower()) for sentence in sentences]
+
+# -----------------------------
+# TRAIN WORD2VEC MODEL
+# -----------------------------
+model = Word2Vec(sentences=data, vector_size=100, window=5, min_count=1, workers=4)
+
+# -----------------------------
+# SIMILARITY CHECK
+# -----------------------------
+print("\nSimilarity between 'machine' and 'learning':",
+      model.wv.similarity('machine', 'learning'))
+
+print("\nSimilarity between 'data' and 'science':",
+      model.wv.similarity('data', 'science'))
+
+print("\nSimilarity between 'python' and 'programming':",
+      model.wv.similarity('python', 'programming'))
+
+# -----------------------------
+# MOST SIMILAR WORDS
+# -----------------------------
+print("\nWords similar to 'machine':")
+print(model.wv.most_similar('machine'))
+
+
+
+#Word2Vec
+
+
+from gensim.models import Word2Vec
+from nltk.tokenize import sent_tokenize
+
+# -----------------------------
+# LONG INPUT (200+ words)
+# -----------------------------
+text2 = """Machine learning is a powerful technology that allows computers to learn from data.
+It is widely used in many applications such as image recognition, speech processing,
+recommendation systems, and natural language processing.
+
+Deep learning is a subset of machine learning that uses neural networks with many layers.
+These models are capable of learning complex patterns from large amounts of data.
+Artificial intelligence is the broader concept of machines being able to carry out tasks in a smart way.
+
+Data science combines statistics, data analysis, and machine learning techniques to extract insights from data.
+Python is one of the most popular programming languages used in data science because of its simplicity and powerful libraries.
+
+Models are trained using datasets and evaluated using different metrics.
+Improving model accuracy is one of the main goals in machine learning projects.
+Feature engineering and preprocessing steps are crucial for building efficient models."""
+
+# -----------------------------
+# TOKENIZATION
+# -----------------------------
+sentences = sent_tokenize(text2)
+data = [word_tokenize(sentence.lower()) for sentence in sentences]
+
+# -----------------------------
+# TRAIN WORD2VEC MODEL
+# -----------------------------
+model = Word2Vec(sentences=data, vector_size=100, window=5, min_count=1, workers=4)
+
+# -----------------------------
+# SIMILARITY CHECK
+# -----------------------------
+print("\nSimilarity between 'machine' and 'learning':",
+      model.wv.similarity('machine', 'learning'))
+
+print("\nSimilarity between 'data' and 'science':",
+      model.wv.similarity('data', 'science'))
+
+print("\nSimilarity between 'python' and 'programming':",
+      model.wv.similarity('python', 'programming'))
+
+# -----------------------------
+# MOST SIMILAR WORDS
+# -----------------------------
+print("\nWords similar to 'machine':")
+print(model.wv.most_similar('machine'))
