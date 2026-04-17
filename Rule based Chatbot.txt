@@ -1,0 +1,102 @@
+# Rule-Based Chatbot: Student and College Library Assistant
+# Features Included:
+# 1. Rule-based chatbot
+# 2. Mathematical calculations (fine, total books, days)
+# 3. if-else conditions
+# 4. Exception handling
+# 5. Domain: Student and College Library Assistant
+
+print("=======================================")
+print(" Welcome to College Library Chatbot ")
+print("=======================================")
+
+student_name = input("Enter your name: ")
+
+while True:
+    print("\nHello", student_name)
+    print("Choose an option:")
+    print("1. Search Book")
+    print("2. Borrow Book")
+    print("3. Return Book")
+    print("4. Calculate Fine")
+    print("5. Library Timing")
+    print("6. Exit")
+
+    choice = input("Enter your choice (1-6): ")
+
+    try:
+        # Search Book
+        if choice == '1':
+            book = input("Enter book name: ").lower()
+
+            if book == "python":
+                print("Book Available: Python Programming - Shelf A1")
+            elif book == "java":
+                print("Book Available: Java Basics - Shelf B2")
+            elif book == "database":
+                print("Book Available: DBMS Concepts - Shelf C3")
+            else:
+                print("Sorry! Book not available.")
+
+        # Borrow Book
+        elif choice == '2':
+            book = input("Enter book name to borrow: ")
+            days = int(input("Enter number of days to borrow: "))
+
+            if days <= 15:
+                print("Book borrowed successfully:", book)
+                print("Return within", days, "days.")
+            else:
+                print("Maximum borrow limit is 15 days.")
+
+        # Return Book
+        elif choice == '3':
+            book = input("Enter returned book name: ")
+            print("Book returned successfully:", book)
+
+        # Fine Calculation
+        elif choice == '4':
+            late_days = int(input("Enter late return days: "))
+
+            if late_days <= 0:
+                print("No fine.")
+            else:
+                fine = late_days * 5   # Rs.5 per day fine
+                print("Late Fine = Rs.", fine)
+
+        # Library Timing
+        elif choice == '5':
+            print("Library Timing: 9:00 AM to 5:00 PM")
+
+        # Exit
+        elif choice == '6':
+            print("Thank you for using Library Chatbot!")
+            break
+
+        else:
+            print("Invalid choice! Please enter 1 to 6.")
+
+    except ValueError:
+        print("Invalid input! Please enter numbers only where required.")
+
+    except Exception as e:
+        print("An error occurred:", e)
+
+=======================================
+ Welcome to College Library Chatbot 
+=======================================
+Enter your name: Naeem
+
+Hello Naeem
+Choose an option:
+1. Search Book
+2. Borrow Book
+3. Return Book
+4. Calculate Fine
+5. Library Timing
+6. Exit
+Enter your choice (1-6): 2
+Enter book name to borrow: Abcd
+Enter number of days to borrow: 3
+Book borrowed successfully: Abcd
+Return within 3 days.
